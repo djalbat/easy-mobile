@@ -1,6 +1,6 @@
 # Easy Mobile
 
-Gestures for mobile development.
+Gestures for mobile web applications.
 
 ### JSX support
 

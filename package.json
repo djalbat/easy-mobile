@@ -1,10 +1,10 @@
 {
   "name": "easy-mobile",
   "author": "James Smith",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "license": "MIT, Anti-996",
   "homepage": "https://github.com/djalbat/easy-mobile",
-  "description": "Gestures for mobile development.",
+  "description": "Gestures for mobile web applications.",
   "repository": {
     "type": "git",
     "url": "https://github.com/djalbat/easy-mobile"
