@@ -56,6 +56,8 @@ Two mixins are provided, one for the touch functionality and one for the full-sc
 They should be assigned to the class's prototype in the usual manner.
 In order to make use of the mixins, call their associated enable and disable functions when mounting and unmounting.
 
+### Touches functionality
+
 The following listing gives an example of touch mixin usage:
 
 ```
@@ -108,15 +110,17 @@ The complete list of custom touch events that can be handled is:
 
 As well as the usual `event` and `element` first and second arguments, the handlers can take various other arguments.
 
-* The `single-tap` and `double-tap` event handlers as well as the `drag-start` event handler have `top` and `left` additional arguments for the screen position of the touch.
+* The `single-tap` and `double-tap` event handlers as well as the `drag-start` event handler have `top` and `left` additional arguments for the position of the touch.
  
-* The `drag-up`, `drag-down`, `drag-left` and `drag-right` event handlers also have `top` and `left` additional arguments but they are relative to the touch position at the start of the drag.
+* The `drag-up`, `drag-down`, `drag-left` and `drag-right` event handlers also have `top` and `left` additional arguments but they are relative to the position of the touch at the start of the drag.
  
 * The `pinch-start` event handler takes no additional arguments.
  
 * The `pinch-move` event handler has a `ratio` additional argument that is the ratio of the distance between the two touch positions divided by the distance between the two starting touch positions.
  
 * The `swipe-up`, `swipe-down`, `swipe-left` and `swipe-right` event handlers have `top` and `left` additional arguments for the touch position at the start of the swipe. They also have a `speed` argument which is the speed of the touch position projected in the swipe's direction.
+
+### Full-screen functionality
 
 There are two methods that the full-screen mixin provides along with the usual methods to enable and disable the functionality as well as register or deregister the handler.
 The following listing should suffice for an explanation:
@@ -168,7 +172,7 @@ class FullScreenDiv extends Element {
 Object.assign(FullScreenDiv.prototype, fullScreenMixins);
 ```
 
-Note that there is one full-screen custom event:
+There is only one full-screen custom event:
 
 * `full-screen-change`
 
