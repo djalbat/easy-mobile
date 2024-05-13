@@ -1,6 +1,6 @@
 # Easy Mobile
 
-Gestures for mobile web applications.
+Touch gestures for mobile web applications.
 
 Single tap, double tap, drag, pinch and swipe gestures are all supported. 
 A little full-screen functionality is also included.
