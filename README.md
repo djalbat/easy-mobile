@@ -2,6 +2,8 @@
 
 Gestures for mobile web applications.
 
+Single tap, double tap, drag and pinch gestures are all supported. Full-screen functionality is also included.
+
 ### JSX support
 
 There is now support for JSX in the form of [Juxtapose](https://github.com/djalbat/Juxtapose). What this means is that Easy *will* now help you with the architecture of your large application. So although Easy elements will continue to work standalone, their use with Juxtapose is recommended.
@@ -9,6 +11,7 @@ There is now support for JSX in the form of [Juxtapose](https://github.com/djalb
 ### Related projects
 
 - [Easy](https://github.com/djalbat/easy) Elements that abstract away from the DOM.
+- [Easy Layout](https://github.com/djalbat/easy-layout) Layout elements that work with CSS flexbox.
 - [Easy Navigation](https://github.com/djalbat/easy-navigation) A responsive accordion and associated navigation.
 - [Easy File System](https://github.com/djalbat/easy-file-system) A file system explorer and a rubbish bin.
 - [Easy RichTextarea](https://github.com/djalbat/easy-richTextarea) A textarea element that handles and hands off events well.
@@ -48,7 +51,56 @@ One last thing to bear in mind is that this package is included by way of a rela
 
 ## Usage
 
+Two mixins are provided, one for touch functionality and one for full-screen functionality.
+They should be assigned to the class's prototype in the usual manner.
+In order to make use of the mixins, call their associated enable and disable functions when mounting and unmounting.
 
+```
+import { touchMixins } from "easy-movile";
+
+class View extends Element {
+  dragUpCustomHandler = (event, element, top, left) => {
+    console.log("drag up", top)
+  }
+
+  ...
+
+  didMount() {
+    this.onCustomDragUp(this.dragUpCustomHandler);
+    
+    ...
+
+    this.enableTouch();
+  }
+
+  willUnmount() {
+    this.disableTouch();
+
+    this.offCustomDragUp(this.dragUpCustomHandler);
+    
+    ...
+  }
+}
+
+Object.assign(View.prototype, touchMixins);
+```
+
+Only one handler is shown here. The complete list of custom events that can be handled is:
+
+* `drag-up`
+* `drag-down`
+* `drag-left`
+* `drag-right`
+* `drag-start`
+* `swipe-up`
+* `swipe-down`
+* `swipe-left`
+* `swipe-right`
+* `pinch-move`
+* `pinch-start`
+* `single-tap`
+* `double-tap`
+* `full-screen-change`
 
 ## Building
 
