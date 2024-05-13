@@ -56,6 +56,7 @@ They should be assigned to the class's prototype in the usual manner.
 In order to make use of the mixins, call their associated enable and disable functions when mounting and unmounting.
 
 ```
+import { Element } from "easy";
 import { touchMixins } from "easy-movile";
 
 class View extends Element {
@@ -85,7 +86,7 @@ class View extends Element {
 Object.assign(View.prototype, touchMixins);
 ```
 
-Only one handler is shown here. The complete list of custom events that can be handled is:
+Only one handler is shown here. The complete list of custom touch events that can be handled is:
 
 * `drag-up`
 * `drag-down`
@@ -100,7 +101,70 @@ Only one handler is shown here. The complete list of custom events that can be h
 * `pinch-start`
 * `single-tap`
 * `double-tap`
+
+And there is one full-screen custom event:
+
 * `full-screen-change`
+
+As well as the conventional `evnet` and `element` first and second arguments, the handlers can take various other arguments, as follows:
+
+* The `single-tap` and `double-tap` event handlers as well as the `drag-start` event handler have `top` and `left` additional arguments for the screen position of the tap or start of the drag.
+* The `drag-up`, `drag-down`, `drag-left` and `drag-right` event handlers also have `top` and `left` additional arguments but they are relative to the touch position at the start of the drag.
+* The `pinch-start` event handler takes no additional arguments.
+* The `pinch-move` event handler has a `ratio` additional argument that is the ratio of the distance between the two touch positions divided by the distance between the two starting touch positions.
+* The `swipe-up`, `swipe-down`, `swipe-left` and `swipe-right` event handlers have `top` and `left` additional arguments for the touch position at the start of the swipe. They also have a `speed` argument which is the speed of the touch position projected in the swipe's direction.
+
+There are two methods that the full-screen mixin provides along with the usual methods to enable and disable the functionality as well as register or deregister the handler.
+The following listing should suffice for an explanation:
+
+```
+import { Element } from "easy";
+import { fullScreenMixins, fullScreenUtilities } from "easy-mobile";
+
+import FullScreenButton from "../button/fullScreen";
+
+const { isFullScreen } = fullScreenUtilities;
+
+class FullScreenDiv extends Element {
+  fullScreenChangeCustomHandler = (event, element) => {
+    ///
+  }
+
+  fullScreenButtonClickHandler = (event, element) => {
+    const fullScreen = isFullScreen();
+
+    fullScreen ?
+      this.exitFullScreen() :
+        this.requestFullScreen();
+  }
+
+  didMount() {
+    this.enableFullScreen();
+
+    this.onCustomFullScreenChange(this.fullScreenButtonClickHandler)
+  }
+
+  willUnmount() {
+    this.offCustomFullScreenChange(this.fullScreenButtonClickHandler)
+
+    this.disableFullScreen();
+  }
+
+  childElements() {
+    return (
+
+      <FullScreenButton onClick={this.fullScreenButtonClickHandler} />
+
+    );
+  }
+
+  ...
+}
+
+Object.assign(FullScreenDiv.prototype, fullScreenMixins);
+```
+
+The one further point of note is that you should always rely on the `full-screen` custom event as there will be times when full-screen requests are denied.
 
 ## Building
 
