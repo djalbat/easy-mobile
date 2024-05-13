@@ -5,8 +5,8 @@ import { window, eventTypes } from "easy";
 
 import RelativePosition from "../position/relative";
 
+import { PI, TAP_DELAY, PI_OVER_TWO, MAXIMUM_TAP_TIME, MINIMUM_SWIPE_SPEED, MAXIMUM_SPREAD } from "../constants";
 import { sortPositions, matchPositions, filterPositions, positionsFromMouseEvent, positionsFromTouchEvent } from "../utilities/positions";
-import { PI, TAP_DELAY, DRAG_DELAY, PINCH_DELAY, PI_OVER_TWO, MAXIMUM_TAP_TIME, MINIMUM_SWIPE_SPEED, MAXIMUM_SPREAD } from "../constants";
 import { DRAG_UP_CUSTOM_EVENT_TYPE,
          DRAG_DOWN_CUSTOM_EVENT_TYPE,
          DRAG_LEFT_CUSTOM_EVENT_TYPE,
@@ -26,8 +26,6 @@ const { push, first, second } = arrayUtilities,
 
 function enableTouch() {
   const tapInterval = null,
-        dragInterval = null,
-        pinchInterval = null,
         startMagnitude = null,
         startPositions = [],
         movingPositions = [],
@@ -35,8 +33,6 @@ function enableTouch() {
 
   this.updateState({
     tapInterval,
-    dragInterval,
-    pinchInterval,
     startMagnitude,
     startPositions,
     movingPositions,
@@ -300,30 +296,6 @@ function setTapInterval(tapInterval) {
   });
 }
 
-function getDragInterval() {
-  const { dragInterval } = this.getState();
-
-  return dragInterval;
-}
-
-function setDragInterval(dragInterval) {
-  this.updateState({
-    dragInterval
-  });
-}
-
-function getPinchInterval() {
-  const { pinchInterval } = this.getState();
-
-  return pinchInterval;
-}
-
-function setPinchInterval(pinchInterval) {
-  this.updateState({
-    pinchInterval
-  });
-}
-
 function getStartMagnitude() {
   const { startMagnitude } = this.getState();
 
@@ -440,11 +412,11 @@ function startHandler(event, element, positionsFromEvent) {
   const startingPositionsLength = startPositions.length;
 
   if (startingPositionsLength === 1) {
-    this.waitToDrag(event, element);
+    this.dragStart(event, element);
   }
 
   if (startingPositionsLength === 2) {
-    this.waitToPinch(event, element);
+    this.pinchStart(event, element);
   }
 }
 
@@ -626,14 +598,8 @@ function swipe(event, element, speed, direction) {
 }
 
 function dragStart(event, element) {
-  const startPositions = this.getStartPositions(),
-        startPositionsLength = startPositions.length;
-
-  if (startPositionsLength !== 1) {
-    return;
-  }
-
   const customEventType = DRAG_START_CUSTOM_EVENT_TYPE,
+        startPositions = this.getStartPositions(),
         firstStartPosition = first(startPositions),
         startPosition = firstStartPosition,  ///
         top = startPosition.getTop(),
@@ -643,14 +609,8 @@ function dragStart(event, element) {
 }
 
 function pinchStart(event, element) {
-  const startPositions = this.getStartPositions(),
-    startPositionsLength = startPositions.length;
-
-  if (startPositionsLength !== 2) {
-    return;
-  }
-
   const customEventType = PINCH_START_CUSTOM_EVENT_TYPE,
+        startPositions = this.getStartPositions(),
         firstStartPosition = first(startPositions),
         secondStartPosition = second(startPositions),
         relativeStartPosition = RelativePosition.fromFirstPositionAndSecondPosition(firstStartPosition, secondStartPosition),
@@ -660,50 +620,6 @@ function pinchStart(event, element) {
   this.setStartMagnitude(startMagnitude);
 
   this.callCustomHandlersConditionally(customEventType, event, element);
-}
-
-function waitToDrag(event, element) {
-  let dragInterval = this.getDragInterval();
-
-  if (dragInterval !== null) {
-    clearTimeout(dragInterval);
-
-    dragInterval = null;
-
-    this.setDragInterval(dragInterval);
-  }
-
-  dragInterval = setTimeout(() => {
-    dragInterval = null;
-
-    this.setDragInterval(dragInterval);
-
-    this.dragStart(event, element);
-  }, DRAG_DELAY);
-
-  this.setDragInterval(dragInterval);
-}
-
-function waitToPinch(event, element) {
-  let pinchInterval = this.getPinchInterval();
-
-  if (pinchInterval !== null) {
-    clearTimeout(pinchInterval);
-
-    pinchInterval = null;
-
-    this.setPinchInterval(pinchInterval);
-  }
-
-  pinchInterval = setTimeout(() => {
-    pinchInterval = null;
-
-    this.setPinchInterval(pinchInterval);
-
-    this.pinchStart(event, element);
-  }, PINCH_DELAY);
-
-  this.setPinchInterval(pinchInterval);
 }
 
 function possibleTap(event, element) {
@@ -827,10 +743,6 @@ const touchMixins = {
   offCustomDoubleTap,
   getTapInterval,
   setTapInterval,
-  getDragInterval,
-  setDragInterval,
-  getPinchInterval,
-  setPinchInterval,
   getStartMagnitude,
   setStartMagnitude,
   getStartPositions,
@@ -855,8 +767,6 @@ const touchMixins = {
   swipe,
   dragStart,
   pinchStart,
-  waitToDrag,
-  waitToPinch,
   possibleTap,
   possibleSwipe,
   singleTapOrDoubleTap,
