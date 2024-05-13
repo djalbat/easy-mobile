@@ -460,30 +460,6 @@ function endHandler(event, element, positionsFromEvent) {
 
       this.possibleSwipe(event, element);
     }
-
-    if (startPositionsLength === 1) {
-      let dragInterval = this.getDragInterval();
-
-      if (dragInterval !== null) {
-        clearTimeout(dragInterval);
-
-        dragInterval = null;
-
-        this.setDragInterval(dragInterval);
-      }
-    }
-
-    if (startPositionsLength === 2) {
-      let pinchInterval = this.getPinchInterval();
-
-      if (pinchInterval !== null) {
-        clearTimeout(pinchInterval);
-
-        pinchInterval = null;
-
-        this.setPinchInterval(pinchInterval);
-      }
-    }
   }
 
   filterPositions(startPositions, positions);
