@@ -437,19 +437,11 @@ function moveHandler(event, element, positionsFromEvent) {
     const movingPositionsLength = movingPositions.length;
 
     if (movingPositionsLength === 1) {
-      const dragInterval = this.getDragInterval();
-
-      if (dragInterval === null) {
-        this.drag(event, element);
-      }
+      this.drag(event, element);
     }
 
     if (movingPositionsLength === 2) {
-      const pinchInterval = this.getPinchInterval();
-
-      if (pinchInterval === null) {
-        this.pinch(event, element);
-      }
+      this.pinch(event, element);
     }
   }
 }
