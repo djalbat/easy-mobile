@@ -5,8 +5,8 @@ import { window, eventTypes } from "easy";
 
 import RelativePosition from "../position/relative";
 
-import { PI, TAP_DELAY, PI_OVER_TWO, MAXIMUM_TAP_TIME, MINIMUM_SWIPE_SPEED, MAXIMUM_SPREAD } from "../constants";
 import { sortPositions, matchPositions, filterPositions, positionsFromMouseEvent, positionsFromTouchEvent } from "../utilities/positions";
+import { PI, TAP_DELAY, DRAG_DELAY, PINCH_DELAY, PI_OVER_TWO, MAXIMUM_TAP_TIME, MINIMUM_SWIPE_SPEED, MAXIMUM_SPREAD } from "../constants";
 import { DRAG_UP_CUSTOM_EVENT_TYPE,
          DRAG_DOWN_CUSTOM_EVENT_TYPE,
          DRAG_LEFT_CUSTOM_EVENT_TYPE,
@@ -19,6 +19,7 @@ import { DRAG_UP_CUSTOM_EVENT_TYPE,
          SWIPE_RIGHT_CUSTOM_EVENT_TYPE,
          PINCH_MOVE_CUSTOM_EVENT_TYPE,
          PINCH_START_CUSTOM_EVENT_TYPE,
+         PINCH_END_CUSTOM_EVENT_TYPE,
          SINGLE_TAP_CUSTOM_EVENT_TYPE,
          DOUBLE_TAP_CUSTOM_EVENT_TYPE } from "../customEventTypes";
 
@@ -27,6 +28,8 @@ const { push, first, second } = arrayUtilities,
 
 function enableTouch() {
   const tapInterval = null,
+        dragInterval = null,
+        pinchInterval = null,
         startMagnitude = null,
         startPositions = [],
         movingPositions = [],
@@ -34,6 +37,8 @@ function enableTouch() {
 
   this.updateState({
     tapInterval,
+    dragInterval,
+    pinchInterval,
     startMagnitude,
     startPositions,
     movingPositions,
@@ -271,6 +276,20 @@ function offCustomPinchStart(pinchStartCustomHandler, element) {
   this.offCustomEvent(customEventType, customHandler, element);
 }
 
+function onCustomPinchEnd(pinchEndCustomHandler, element) {
+  const customEventType = PINCH_END_CUSTOM_EVENT_TYPE,
+        customHandler = pinchEndCustomHandler; ///
+
+  this.onCustomEvent(customEventType, customHandler, element);
+}
+
+function offCustomPinchEnd(pinchEndCustomHandler, element) {
+  const customEventType = PINCH_END_CUSTOM_EVENT_TYPE,
+        customHandler = pinchEndCustomHandler; ///
+
+  this.offCustomEvent(customEventType, customHandler, element);
+}
+
 function onCustomSingleTap(singleTapCustomHandler, element) {
   const customEventType = SINGLE_TAP_CUSTOM_EVENT_TYPE,
         customHandler = singleTapCustomHandler; ///
@@ -308,6 +327,30 @@ function getTapInterval() {
 function setTapInterval(tapInterval) {
   this.updateState({
     tapInterval
+  });
+}
+
+function getDragInterval() {
+  const { dragInterval } = this.getState();
+
+  return dragInterval;
+}
+
+function setDragInterval(dragInterval) {
+  this.updateState({
+    dragInterval
+  });
+}
+
+function getPinchInterval() {
+  const { pinchInterval } = this.getState();
+
+  return pinchInterval;
+}
+
+function setPinchInterval(pinchInterval) {
+  this.updateState({
+    pinchInterval
   });
 }
 
@@ -427,11 +470,11 @@ function startHandler(event, element, positionsFromEvent) {
   const startingPositionsLength = startPositions.length;
 
   if (startingPositionsLength === 1) {
-    this.dragStart(event, element);
+    this.waitToDrag(event, element);
   }
 
   if (startingPositionsLength === 2) {
-    this.pinchStart(event, element);
+    this.waitToPinch(event, element);
   }
 }
 
@@ -452,11 +495,19 @@ function moveHandler(event, element, positionsFromEvent) {
     const movingPositionsLength = movingPositions.length;
 
     if (movingPositionsLength === 1) {
-      this.drag(event, element);
+      const dragInterval = this.getDragInterval();
+
+      if (dragInterval === null) {
+        this.drag(event, element);
+      }
     }
 
     if (movingPositionsLength === 2) {
-      this.pinch(event, element);
+      const pinchInterval = this.getPinchInterval();
+
+      if (pinchInterval === null) {
+        this.pinch(event, element);
+      }
     }
   }
 }
@@ -468,18 +519,39 @@ function endHandler(event, element, positionsFromEvent) {
         positionsMatch = matchPositions(startPositions, movingPositions);
 
   if (positionsMatch) {
-    const startPositionsLength = startPositions.length,
-          movingPositionsLength = movingPositions.length;
+    const startPositionsLength = startPositions.length;
 
     if (startPositionsLength === 1) {
-      if (movingPositionsLength === 0) {
-        this.singleTapOrDoubleTap(event, element);
-      } else {
+      this.possibleTap(event, element);
+
+      this.possibleSwipe(event, element);
+    }
+
+    if (startPositionsLength === 1) {
+      let dragInterval = this.getDragInterval();
+
+      if (dragInterval === null) {
         this.dragEnd(event, element);
+      } else {
+        clearTimeout(dragInterval);
 
-        this.possibleTap(event, element);
+        dragInterval = null;
 
-        this.possibleSwipe(event, element);
+        this.setDragInterval(dragInterval);
+      }
+    }
+
+    if (startPositionsLength === 2) {
+      let pinchInterval = this.getPinchInterval();
+
+      if (pinchInterval === null) {
+        this.pinchEnd(event, element);
+      } else {
+        clearTimeout(pinchInterval);
+
+        pinchInterval = null;
+
+        this.setPinchInterval(pinchInterval);
       }
     }
   }
@@ -593,9 +665,21 @@ function dragEnd(event, element) {
   this.callCustomHandlersConditionally(customEventType, event, element);
 }
 
+function pinchEnd(event, element) {
+  const customEventType = PINCH_END_CUSTOM_EVENT_TYPE;
+
+  this.callCustomHandlersConditionally(customEventType, event, element);
+}
+
 function dragStart(event, element) {
+  const startPositions = this.getStartPositions(),
+        startPositionsLength = startPositions.length;
+
+  if (startPositionsLength !== 1) {
+    return;
+  }
+
   const customEventType = DRAG_START_CUSTOM_EVENT_TYPE,
-        startPositions = this.getStartPositions(),
         firstStartPosition = first(startPositions),
         startPosition = firstStartPosition,  ///
         top = startPosition.getTop(),
@@ -606,16 +690,66 @@ function dragStart(event, element) {
 
 function pinchStart(event, element) {
   const startPositions = this.getStartPositions(),
+    startPositionsLength = startPositions.length;
+
+  if (startPositionsLength !== 2) {
+    return;
+  }
+
+  const customEventType = PINCH_START_CUSTOM_EVENT_TYPE,
         firstStartPosition = first(startPositions),
         secondStartPosition = second(startPositions),
         relativeStartPosition = RelativePosition.fromFirstPositionAndSecondPosition(firstStartPosition, secondStartPosition),
         magnitude = relativeStartPosition.getMagnitude(),
-        startMagnitude = magnitude, ///
-        customEventType = PINCH_START_CUSTOM_EVENT_TYPE;
+        startMagnitude = magnitude; ///
 
   this.setStartMagnitude(startMagnitude);
 
   this.callCustomHandlersConditionally(customEventType, event, element);
+}
+
+function waitToDrag(event, element) {
+  let dragInterval = this.getDragInterval();
+
+  if (dragInterval !== null) {
+    clearTimeout(dragInterval);
+
+    dragInterval = null;
+
+    this.setDragInterval(dragInterval);
+  }
+
+  dragInterval = setTimeout(() => {
+    dragInterval = null;
+
+    this.setDragInterval(dragInterval);
+
+    this.dragStart(event, element);
+  }, DRAG_DELAY);
+
+  this.setDragInterval(dragInterval);
+}
+
+function waitToPinch(event, element) {
+  let pinchInterval = this.getPinchInterval();
+
+  if (pinchInterval !== null) {
+    clearTimeout(pinchInterval);
+
+    pinchInterval = null;
+
+    this.setPinchInterval(pinchInterval);
+  }
+
+  pinchInterval = setTimeout(() => {
+    pinchInterval = null;
+
+    this.setPinchInterval(pinchInterval);
+
+    this.pinchStart(event, element);
+  }, DRAG_DELAY);
+
+  this.setPinchInterval(pinchInterval);
 }
 
 function possibleTap(event, element) {
@@ -735,12 +869,18 @@ const touchMixins = {
   offCustomPinchMove,
   onCustomPinchStart,
   offCustomPinchStart,
+  onCustomPinchEnd,
+  offCustomPinchEnd,
   onCustomSingleTap,
   offCustomSingleTap,
   onCustomDoubleTap,
   offCustomDoubleTap,
   getTapInterval,
   setTapInterval,
+  getDragInterval,
+  setDragInterval,
+  getPinchInterval,
+  setPinchInterval,
   getStartMagnitude,
   setStartMagnitude,
   getStartPositions,
@@ -764,8 +904,11 @@ const touchMixins = {
   pinch,
   swipe,
   dragEnd,
+  pinchEnd,
   dragStart,
   pinchStart,
+  waitToDrag,
+  waitToPinch,
   possibleTap,
   possibleSwipe,
   singleTapOrDoubleTap,
