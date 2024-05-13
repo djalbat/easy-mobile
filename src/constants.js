@@ -9,6 +9,3 @@ export const PI_OVER_TWO = PI / 2;
 export const MAXIMUM_SPREAD = PI / 4;
 export const MAXIMUM_TAP_TIME = 125;
 export const MINIMUM_SWIPE_SPEED = 1;
-export const PORTRAIT_ORIENTATION = "portrait";
-export const LANDSCAPE_ORIENTATION = "landscape";
-export const ORIENTATION_PORTRAIT_QUERY = "(orientation: portrait)";
