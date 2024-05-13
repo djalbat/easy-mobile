@@ -36,17 +36,12 @@ class View extends Element {
     console.log("drag down", top)
   }
 
-  dragEndCustomHandler = (event, element, top, left) => {
-    console.log("drag end")
-  }
-
   dragUpCustomHandler = (event, element, top, left) => {
     console.log("drag up", top)
   }
 
   didMount() {
     this.onCustomDragUp(this.dragUpCustomHandler);
-    this.onCustomDragEnd(this.dragEndCustomHandler);
     this.onCustomDragDown(this.dragDownCustomHandler);
     this.onCustomSwipeLeft(this.swipeLeftCustomHandler);
     this.onCustomSwipeRight(this.swipeRightCustomHandler);
@@ -62,7 +57,6 @@ class View extends Element {
     this.disableTouch();
 
     this.offCustomDragUp(this.dragUpCustomHandler);
-    this.offCustomDragEnd(this.dragEndCustomHandler);
     this.offCustomDragDown(this.dragDownCustomHandler);
     this.offCustomSwipeLeft(this.swipeLeftCustomHandler);
     this.offCustomSwipeRight(this.swipeRightCustomHandler);

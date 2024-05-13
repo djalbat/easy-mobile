@@ -12,14 +12,12 @@ import { DRAG_UP_CUSTOM_EVENT_TYPE,
          DRAG_LEFT_CUSTOM_EVENT_TYPE,
          DRAG_RIGHT_CUSTOM_EVENT_TYPE,
          DRAG_START_CUSTOM_EVENT_TYPE,
-         DRAG_END_CUSTOM_EVENT_TYPE,
          SWIPE_UP_CUSTOM_EVENT_TYPE,
          SWIPE_DOWN_CUSTOM_EVENT_TYPE,
          SWIPE_LEFT_CUSTOM_EVENT_TYPE,
          SWIPE_RIGHT_CUSTOM_EVENT_TYPE,
          PINCH_MOVE_CUSTOM_EVENT_TYPE,
          PINCH_START_CUSTOM_EVENT_TYPE,
-         PINCH_END_CUSTOM_EVENT_TYPE,
          SINGLE_TAP_CUSTOM_EVENT_TYPE,
          DOUBLE_TAP_CUSTOM_EVENT_TYPE } from "../customEventTypes";
 
@@ -178,20 +176,6 @@ function offCustomDragStart(dragStartCustomHandler, element) {
   this.offCustomEvent(customEventType, customHandler, element);
 }
 
-function onCustomDragEnd(dragEndCustomHandler, element) {
-  const customEventType = DRAG_END_CUSTOM_EVENT_TYPE,
-        customHandler = dragEndCustomHandler; ///
-
-  this.onCustomEvent(customEventType, customHandler, element);
-}
-
-function offCustomDragEnd(dragEndCustomHandler, element) {
-  const customEventType = DRAG_END_CUSTOM_EVENT_TYPE,
-        customHandler = dragEndCustomHandler; ///
-
-  this.offCustomEvent(customEventType, customHandler, element);
-}
-
 function onCustomSwipeUp(swipeUpCustomHandler, element) {
   const customEventType = SWIPE_UP_CUSTOM_EVENT_TYPE,
         customHandler = swipeUpCustomHandler; ///
@@ -272,20 +256,6 @@ function onCustomPinchStart(pinchStartCustomHandler, element) {
 function offCustomPinchStart(pinchStartCustomHandler, element) {
   const customEventType = PINCH_START_CUSTOM_EVENT_TYPE,
         customHandler = pinchStartCustomHandler; ///
-
-  this.offCustomEvent(customEventType, customHandler, element);
-}
-
-function onCustomPinchEnd(pinchEndCustomHandler, element) {
-  const customEventType = PINCH_END_CUSTOM_EVENT_TYPE,
-        customHandler = pinchEndCustomHandler; ///
-
-  this.onCustomEvent(customEventType, customHandler, element);
-}
-
-function offCustomPinchEnd(pinchEndCustomHandler, element) {
-  const customEventType = PINCH_END_CUSTOM_EVENT_TYPE,
-        customHandler = pinchEndCustomHandler; ///
 
   this.offCustomEvent(customEventType, customHandler, element);
 }
@@ -530,9 +500,7 @@ function endHandler(event, element, positionsFromEvent) {
     if (startPositionsLength === 1) {
       let dragInterval = this.getDragInterval();
 
-      if (dragInterval === null) {
-        this.dragEnd(event, element);
-      } else {
+      if (dragInterval !== null) {
         clearTimeout(dragInterval);
 
         dragInterval = null;
@@ -544,9 +512,7 @@ function endHandler(event, element, positionsFromEvent) {
     if (startPositionsLength === 2) {
       let pinchInterval = this.getPinchInterval();
 
-      if (pinchInterval === null) {
-        this.pinchEnd(event, element);
-      } else {
+      if (pinchInterval !== null) {
         clearTimeout(pinchInterval);
 
         pinchInterval = null;
@@ -659,18 +625,6 @@ function swipe(event, element, speed, direction) {
   }
 }
 
-function dragEnd(event, element) {
-  const customEventType = DRAG_END_CUSTOM_EVENT_TYPE;
-
-  this.callCustomHandlersConditionally(customEventType, event, element);
-}
-
-function pinchEnd(event, element) {
-  const customEventType = PINCH_END_CUSTOM_EVENT_TYPE;
-
-  this.callCustomHandlersConditionally(customEventType, event, element);
-}
-
 function dragStart(event, element) {
   const startPositions = this.getStartPositions(),
         startPositionsLength = startPositions.length;
@@ -747,7 +701,7 @@ function waitToPinch(event, element) {
     this.setPinchInterval(pinchInterval);
 
     this.pinchStart(event, element);
-  }, DRAG_DELAY);
+  }, PINCH_DELAY);
 
   this.setPinchInterval(pinchInterval);
 }
@@ -855,8 +809,6 @@ const touchMixins = {
   offCustomDragRight,
   onCustomDragStart,
   offCustomDragStart,
-  onCustomDragEnd,
-  offCustomDragEnd,
   onCustomSwipeUp,
   offCustomSwipeUp,
   onCustomSwipeDown,
@@ -869,8 +821,6 @@ const touchMixins = {
   offCustomPinchMove,
   onCustomPinchStart,
   offCustomPinchStart,
-  onCustomPinchEnd,
-  offCustomPinchEnd,
   onCustomSingleTap,
   offCustomSingleTap,
   onCustomDoubleTap,
@@ -903,8 +853,6 @@ const touchMixins = {
   drag,
   pinch,
   swipe,
-  dragEnd,
-  pinchEnd,
   dragStart,
   pinchStart,
   waitToDrag,
