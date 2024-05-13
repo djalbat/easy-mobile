@@ -28,15 +28,13 @@ function enableTouch() {
   const tapInterval = null,
         startMagnitude = null,
         startPositions = [],
-        movingPositions = [],
-        customGesturesEnabled = true;
+        movingPositions = [];
 
   this.updateState({
     tapInterval,
     startMagnitude,
     startPositions,
-    movingPositions,
-    customGesturesEnabled
+    movingPositions
   });
 
   this.onMouseDown(this.mouseDownHandler);
@@ -308,18 +306,6 @@ function setStartMagnitude(startMagnitude) {
   });
 }
 
-function areCustomGesturesEnabled() {
-  const { customGesturesEnabled } = this.getState();
-
-  return customGesturesEnabled;
-}
-
-function setCustomGesturesEnabled(customGesturesEnabled) {
-  this.updateState({
-    customGesturesEnabled
-  });
-}
-
 function getStartPositions() {
   const { startPositions } = this.getState();
 
@@ -476,7 +462,7 @@ function singleTap(event, element, top, left) {
 function doubleTap(event, element, top, left) {
   const customEventType = DOUBLE_TAP_CUSTOM_EVENT_TYPE;
 
-  this.callCustomHandlersConditionally(customEventType, event, element, top, left);
+  this.callCustomHandlers(customEventType, event, element, top, left);
 }
 
 function drag(event, element) {
@@ -510,7 +496,7 @@ function drag(event, element) {
   }
 
   if (customEventType !== null) {
-    this.callCustomHandlersConditionally(customEventType, event, element, top, left);
+    this.callCustomHandlers(customEventType, event, element, top, left);
   }
 }
 
@@ -524,7 +510,7 @@ function pinch(event, element) {
         magnitude = relativeMovingPosition.getMagnitude(),
         ratio = magnitude / startMagnitude;
 
-  this.callCustomHandlersConditionally(customEventType, event, element, ratio);
+  this.callCustomHandlers(customEventType, event, element, ratio);
 }
 
 function swipe(event, element, speed, direction) {
@@ -561,7 +547,7 @@ function swipe(event, element, speed, direction) {
           top = startPosition.getTop(),
           left = startPosition.getLeft();
 
-    this.callCustomHandlersConditionally(customEventType, event, element, top, left, speed);
+    this.callCustomHandlers(customEventType, event, element, top, left, speed);
   }
 }
 
@@ -573,7 +559,7 @@ function dragStart(event, element) {
         top = startPosition.getTop(),
         left = startPosition.getLeft();
 
-  this.callCustomHandlersConditionally(customEventType, event, element, top, left);
+  this.callCustomHandlers(customEventType, event, element, top, left);
 }
 
 function pinchStart(event, element) {
@@ -587,7 +573,7 @@ function pinchStart(event, element) {
 
   this.setStartMagnitude(startMagnitude);
 
-  this.callCustomHandlersConditionally(customEventType, event, element);
+  this.callCustomHandlers(customEventType, event, element);
 }
 
 function possibleTap(event, element) {
@@ -654,26 +640,6 @@ function singleTapOrDoubleTap(event, element) {
   this.setTapInterval(tapInterval);
 }
 
-function enableCustomGestures() {
-  const customGesturedEnabled = true;
-
-  this.setCustomGesturesEnabled(customGesturedEnabled);
-}
-
-function disableCustomGestures() {
-  const customGesturedEnabled = false;
-
-  this.setCustomGesturesEnabled(customGesturedEnabled);
-}
-
-function callCustomHandlersConditionally(customEventType, event, element, ...remainingArguments) {
-  const customGesturesEnabled = this.areCustomGesturesEnabled();
-
-  if (customGesturesEnabled) {
-    this.callCustomHandlers(customEventType, event, element, ...remainingArguments);
-  }
-}
-
 const touchMixins = {
   enableTouch,
   disableTouch,
@@ -715,8 +681,6 @@ const touchMixins = {
   setStartMagnitude,
   getStartPositions,
   setStartPositions,
-  areCustomGesturesEnabled,
-  setCustomGesturesEnabled,
   getMovingPositions,
   setMovingPositions,
   touchStartHandler,
@@ -737,10 +701,7 @@ const touchMixins = {
   pinchStart,
   possibleTap,
   possibleSwipe,
-  singleTapOrDoubleTap,
-  enableCustomGestures,
-  disableCustomGestures,
-  callCustomHandlersConditionally
+  singleTapOrDoubleTap
 };
 
 export default touchMixins;
