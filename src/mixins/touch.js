@@ -427,15 +427,15 @@ function startHandler(event, element, positionsFromEvent) {
   if (startingPositionsLength === 1) {
     this.dragStart(event, element);
 
-    let pressInterval = setTimeout(() => {
-      pressInterval = null;
-
-      this.setPressSInterval(pressInterval);
-
-      this.press(event, element);
-    }, PRESS_DELAY);
-
-    this.setPressSInterval(pressInterval);
+    // let pressInterval = setTimeout(() => {
+    //   pressInterval = null;
+    //
+    //   this.setPressSInterval(pressInterval);
+    //
+    //   this.press(event, element);
+    // }, PRESS_DELAY);
+    //
+    // this.setPressSInterval(pressInterval);
   }
 
   if (startingPositionsLength === 2) {
@@ -468,15 +468,15 @@ function moveHandler(event, element, positionsFromEvent) {
     }
   }
 
-  let pressInterval = this.getPressSInterval();
-
-  if (pressInterval !== null) {
-    clearTimeout(pressInterval);
-
-    pressInterval = null;
-
-    this.setPressSInterval(pressInterval);
-  }
+  // let pressInterval = this.getPressSInterval();
+  //
+  // if (pressInterval !== null) {
+  //   clearTimeout(pressInterval);
+  //
+  //   pressInterval = null;
+  //
+  //   this.setPressSInterval(pressInterval);
+  // }
 }
 
 function endHandler(event, element, positionsFromEvent) {
@@ -499,15 +499,15 @@ function endHandler(event, element, positionsFromEvent) {
 
   filterPositions(movingPositions, positions);
 
-  let pressInterval = this.getPressSInterval();
-
-  if (pressInterval !== null) {
-    clearTimeout(pressInterval);
-
-    pressInterval = null;
-
-    this.setPressSInterval(pressInterval);
-  }
+  // let pressInterval = this.getPressSInterval();
+  //
+  // if (pressInterval !== null) {
+  //   clearTimeout(pressInterval);
+  //
+  //   pressInterval = null;
+  //
+  //   this.setPressSInterval(pressInterval);
+  // }
 }
 
 function possibleTap(event, element) {
@@ -522,7 +522,7 @@ function possibleTap(event, element) {
         speed = relativePosition.getSpeed();
 
   if ((speed === 0) && (time < MAXIMUM_TAP_TIME)){
-    this.singleTapOrDoubleTap(event, element);
+    this.tap(event, element);
   }
 }
 
@@ -542,7 +542,7 @@ function possibleSwipe(event, element) {
   }
 }
 
-function singleTapOrDoubleTap(event, element) {
+function tap(event, element) {
   const startPositions = this.getStartPositions(),
         firstStartPosition = first(startPositions),
         startPosition = firstStartPosition, ///
@@ -761,7 +761,7 @@ const touchMixins = {
   endHandler,
   possibleTap,
   possibleSwipe,
-  singleTapOrDoubleTap,
+  tap,
   drag,
   pinch,
   press,
