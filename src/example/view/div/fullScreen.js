@@ -14,16 +14,16 @@ class FullScreenDiv extends Element {
     debugger
   }
 
-  pressCustomHandler = (event, element) => {
-    debugger
-  }
-
   fullScreenButtonClickHandler = (event, element) => {
     const fullScreen = isFullScreen();
 
     fullScreen ?
       this.exitFullScreen() :
         this.requestFullScreen();
+  }
+
+  pressCustomHandler = (event, element) => {
+    debugger
   }
 
   didMount() {
@@ -33,11 +33,11 @@ class FullScreenDiv extends Element {
 
     this.onCustomPress(this.pressCustomHandler);
 
-    this.onCustomFullScreenChange(this.fullScreenButtonClickHandler);
+    this.onCustomFullScreenChange(this.fullScreenChangeCustomHandler);
   }
 
   willUnmount() {
-    this.offCustomFullScreenChange(this.fullScreenButtonClickHandler);
+    this.offCustomFullScreenChange(this.fullScreenChangeCustomHandler);
 
     this.offCustomPress(this.pressCustomHandler);
 
