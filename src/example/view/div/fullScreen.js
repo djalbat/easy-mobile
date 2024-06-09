@@ -3,7 +3,7 @@
 import withStyle from "easy-with-style";  ///
 
 import { Element } from "easy";
-import { fullScreenMixins, fullScreenUtilities } from "../../../index";  ///
+import { touchMixins, fullScreenMixins, fullScreenUtilities } from "../../../index";  ///
 
 import FullScreenButton from "../button/fullScreen";
 
@@ -11,6 +11,10 @@ const { isFullScreen } = fullScreenUtilities;
 
 class FullScreenDiv extends Element {
   fullScreenChangeCustomHandler = (event, element) => {
+    debugger
+  }
+
+  pressCustomHandler = (event, element) => {
     debugger
   }
 
@@ -23,15 +27,23 @@ class FullScreenDiv extends Element {
   }
 
   didMount() {
+    this.enableTouch();
+
     this.enableFullScreen();
 
-    this.onCustomFullScreenChange(this.fullScreenButtonClickHandler)
+    this.onCustomPress(this.pressCustomHandler);
+
+    this.onCustomFullScreenChange(this.fullScreenButtonClickHandler);
   }
 
   willUnmount() {
-    this.offCustomFullScreenChange(this.fullScreenButtonClickHandler)
+    this.offCustomFullScreenChange(this.fullScreenButtonClickHandler);
+
+    this.offCustomPress(this.pressCustomHandler);
 
     this.disableFullScreen();
+
+    this.disableTouch();
   }
 
   childElements() {
@@ -49,6 +61,7 @@ class FullScreenDiv extends Element {
   };
 }
 
+Object.assign(FullScreenDiv.prototype, touchMixins);
 Object.assign(FullScreenDiv.prototype, fullScreenMixins);
 
 export default withStyle(FullScreenDiv)`
