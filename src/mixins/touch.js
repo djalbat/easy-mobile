@@ -303,22 +303,10 @@ function getTapInterval() {
   return tapInterval;
 }
 
-function setTapInterval(tapInterval) {
-  this.updateState({
-    tapInterval
-  });
-}
-
 function getPressSInterval() {
   const { pressInterval } = this.getState();
 
   return pressInterval;
-}
-
-function setPressSInterval(pressInterval) {
-  this.updateState({
-    pressInterval
-  });
 }
 
 function getStartMagnitude() {
@@ -327,28 +315,40 @@ function getStartMagnitude() {
   return startMagnitude;
 }
 
-function setStartMagnitude(startMagnitude) {
-  this.updateState({
-    startMagnitude
-  });
-}
-
 function getStartPositions() {
   const { startPositions } = this.getState();
 
   return startPositions;
 }
 
-function setStartPositions(startPositions) {
-  this.updateState({
-    startPositions
-  });
-}
-
 function getMovingPositions() {
   const { movingPositions } = this.getState();
 
   return movingPositions;
+}
+
+function setTapInterval(tapInterval) {
+  this.updateState({
+    tapInterval
+  });
+}
+
+function setPressSInterval(pressInterval) {
+  this.updateState({
+    pressInterval
+  });
+}
+
+function setStartMagnitude(startMagnitude) {
+  this.updateState({
+    startMagnitude
+  });
+}
+
+function setStartPositions(startPositions) {
+  this.updateState({
+    startPositions
+  });
 }
 
 function setMovingPositions(movingPositions) {
@@ -741,14 +741,14 @@ const touchMixins = {
   onCustomDoubleTap,
   offCustomDoubleTap,
   getTapInterval,
-  setTapInterval,
   getPressSInterval,
-  setPressSInterval,
   getStartMagnitude,
-  setStartMagnitude,
   getStartPositions,
-  setStartPositions,
   getMovingPositions,
+  setTapInterval,
+  setPressSInterval,
+  setStartMagnitude,
+  setStartPositions,
   setMovingPositions,
   touchStartHandler,
   mouseDownHandler,
