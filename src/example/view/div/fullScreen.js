@@ -3,11 +3,9 @@
 import withStyle from "easy-with-style";  ///
 
 import { Element } from "easy";
-import { touchMixins, fullScreenMixins, fullScreenUtilities } from "../../../index";  ///
+import { touchMixins, fullScreenMixins } from "../../../index";  ///
 
 import FullScreenButton from "../button/fullScreen";
-
-const { isFullScreen } = fullScreenUtilities;
 
 class FullScreenDiv extends Element {
   fullScreenChangeCustomHandler = (event, element) => {
@@ -15,11 +13,11 @@ class FullScreenDiv extends Element {
   }
 
   fullScreenButtonClickHandler = (event, element) => {
-    const fullScreen = isFullScreen();
+    const fullScreen = this.isFullScreen();
 
     fullScreen ?
       this.exitFullScreen() :
-        this.requestFullScreen();
+        this.requestFullScreen(alert);
   }
 
   pressCustomHandler = (event, element) => {

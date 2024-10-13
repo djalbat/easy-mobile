@@ -1,7 +1,7 @@
 "use strict";
 
+import { window } from "easy";
 import { arrayUtilities } from "necessary";
-import { window, eventTypes } from "easy";
 
 import RelativePosition from "../position/relative";
 
@@ -22,8 +22,7 @@ import { PRESS_CUSTOM_EVENT_TYPE,
          SINGLE_TAP_CUSTOM_EVENT_TYPE,
          DOUBLE_TAP_CUSTOM_EVENT_TYPE } from "../customEventTypes";
 
-const { push, first, second } = arrayUtilities,
-      { TOUCHSTART_EVENT_TYPE, TOUCHMOVE_EVENT_TYPE, TOUCHEND_EVENT_TYPE } = eventTypes;
+const { push, first, second } = arrayUtilities;
 
 function enableTouch() {
   const tapInterval = null,
@@ -57,48 +56,6 @@ function disableTouch() {
   this.offTouchStart(this.touchStartHandler);
   this.offTouchMove(this.touchMoveHandler);
   this.offTouchEnd(this.touchEndHandler);
-}
-
-function onTouchStart(touchStartHandler) {
-  const eventType = TOUCHSTART_EVENT_TYPE,
-        handler = touchStartHandler;  ///
-
-  this.onEvent(eventType, handler);
-}
-
-function offTouchStart(touchStartHandler) {
-  const eventType = TOUCHSTART_EVENT_TYPE,
-        handler = touchStartHandler;  ///
-
-  this.offEvent(eventType, handler);
-}
-
-function onTouchMove(touchStartHandler) {
-  const eventType = TOUCHMOVE_EVENT_TYPE,
-        handler = touchStartHandler;  ///
-
-  this.onEvent(eventType, handler);
-}
-
-function offTouchMove(touchStartHandler) {
-  const eventType = TOUCHMOVE_EVENT_TYPE,
-        handler = touchStartHandler;  ///
-
-  this.offEvent(eventType, handler);
-}
-
-function onTouchEnd(touchStartHandler) {
-  const eventType = TOUCHEND_EVENT_TYPE,
-        handler = touchStartHandler;  ///
-
-  this.onEvent(eventType, handler);
-}
-
-function offTouchEnd(touchStartHandler) {
-  const eventType = TOUCHEND_EVENT_TYPE,
-        handler = touchStartHandler;  ///
-
-  this.offEvent(eventType, handler);
 }
 
 function onCustomPress(pressCustomHandler, element) {
@@ -706,12 +663,6 @@ function pinchStart(event, element) {
 const touchMixins = {
   enableTouch,
   disableTouch,
-  onTouchStart,
-  offTouchStart,
-  onTouchMove,
-  offTouchMove,
-  onTouchEnd,
-  offTouchEnd,
   onCustomPress,
   offCustomPress,
   onCustomDragUp,
