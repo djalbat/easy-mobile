@@ -1,7 +1,7 @@
 {
   "name": "easy-mobile",
   "author": "James Smith",
-  "version": "1.1.115",
+  "version": "1.1.116",
   "license": "MIT, Anti-996",
   "homepage": "https://github.com/djalbat/easy-mobile",
   "description": "Touch gestures for mobile web applications.",
