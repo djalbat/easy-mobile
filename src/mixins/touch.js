@@ -591,25 +591,25 @@ function swipe(event, element, speed, direction) {
   if ((Math.abs(direction)) < MAXIMUM_SPREAD) {
     customEventType = SWIPE_RIGHT_CUSTOM_EVENT_TYPE;
 
-    speed = speed * Math.cos(direction);
+    speed = speed * Math.abs(Math.cos(direction));
   }
 
   if (Math.abs(PI_OVER_TWO - direction) < MAXIMUM_SPREAD) {
     customEventType = SWIPE_UP_CUSTOM_EVENT_TYPE;
 
-    speed = speed * Math.sin(direction);
+    speed = speed * Math.abs(Math.sin(direction));
   }
 
   if (Math.abs(-PI_OVER_TWO - direction) < MAXIMUM_SPREAD) {
     customEventType = SWIPE_DOWN_CUSTOM_EVENT_TYPE;
 
-    speed = speed * Math.sin(direction);
+    speed = speed * Math.abs(Math.sin(direction));
   }
 
   if ((PI - Math.abs(direction)) < MAXIMUM_SPREAD) {
     customEventType = SWIPE_LEFT_CUSTOM_EVENT_TYPE;
 
-    speed = speed * Math.cos(direction);
+    speed = speed * Math.abs(Math.cos(direction));
   }
 
   if (customEventType !== null) {
