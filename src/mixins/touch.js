@@ -81,6 +81,13 @@ function onCustomDrag(dragCustomHandler, element) {
   this.onCustomEvent(customEventType, customHandler, element);
 }
 
+function offCustomDrag(dragCustomHandler, element) {
+  const customEventType = DRAG_CUSTOM_EVENT_TYPE,
+        customHandler = dragCustomHandler; ///
+
+  this.offCustomEvent(customEventType, customHandler, element);
+}
+
 function onCustomDragUp(dragUpCustomHandler, element) {
   const customEventType = DRAG_UP_CUSTOM_EVENT_TYPE,
         customHandler = dragUpCustomHandler; ///
@@ -681,6 +688,7 @@ const touchMixins = {
   onCustomPress,
   offCustomPress,
   onCustomDrag,
+  offCustomDrag,
   onCustomDragUp,
   offCustomDragUp,
   onCustomDragDown,
