@@ -1,7 +1,6 @@
 "use strict";
 
 export const PRESS_CUSTOM_EVENT_TYPE = "press";
-export const DRAG_CUSTOM_EVENT_TYPE = "drag";
 export const DRAG_UP_CUSTOM_EVENT_TYPE = "drag-up";
 export const DRAG_DOWN_CUSTOM_EVENT_TYPE = "drag-down";
 export const DRAG_LEFT_CUSTOM_EVENT_TYPE = "drag-left";

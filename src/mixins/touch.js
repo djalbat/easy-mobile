@@ -7,22 +7,20 @@ import RelativePosition from "../position/relative";
 
 import { PI, TAP_DELAY, PRESS_DELAY, PI_OVER_TWO, MAXIMUM_TAP_TIME, MINIMUM_SWIPE_SPEED, MAXIMUM_SPREAD } from "../constants";
 import { sortPositions, matchPositions, filterPositions, positionsFromMouseEvent, positionsFromTouchEvent } from "../utilities/positions";
-import {
-  PRESS_CUSTOM_EVENT_TYPE,
-  DRAG_UP_CUSTOM_EVENT_TYPE,
-  DRAG_DOWN_CUSTOM_EVENT_TYPE,
-  DRAG_LEFT_CUSTOM_EVENT_TYPE,
-  DRAG_RIGHT_CUSTOM_EVENT_TYPE,
-  DRAG_START_CUSTOM_EVENT_TYPE,
-  SWIPE_UP_CUSTOM_EVENT_TYPE,
-  SWIPE_DOWN_CUSTOM_EVENT_TYPE,
-  SWIPE_LEFT_CUSTOM_EVENT_TYPE,
-  SWIPE_RIGHT_CUSTOM_EVENT_TYPE,
-  PINCH_MOVE_CUSTOM_EVENT_TYPE,
-  PINCH_START_CUSTOM_EVENT_TYPE,
-  SINGLE_TAP_CUSTOM_EVENT_TYPE,
-  DOUBLE_TAP_CUSTOM_EVENT_TYPE, DRAG_CUSTOM_EVENT_TYPE
-} from "../customEventTypes";
+import { PRESS_CUSTOM_EVENT_TYPE,
+         DRAG_UP_CUSTOM_EVENT_TYPE,
+         DRAG_DOWN_CUSTOM_EVENT_TYPE,
+         DRAG_LEFT_CUSTOM_EVENT_TYPE,
+         DRAG_RIGHT_CUSTOM_EVENT_TYPE,
+         DRAG_START_CUSTOM_EVENT_TYPE,
+         SWIPE_UP_CUSTOM_EVENT_TYPE,
+         SWIPE_DOWN_CUSTOM_EVENT_TYPE,
+         SWIPE_LEFT_CUSTOM_EVENT_TYPE,
+         SWIPE_RIGHT_CUSTOM_EVENT_TYPE,
+         PINCH_MOVE_CUSTOM_EVENT_TYPE,
+         PINCH_START_CUSTOM_EVENT_TYPE,
+         SINGLE_TAP_CUSTOM_EVENT_TYPE,
+         DOUBLE_TAP_CUSTOM_EVENT_TYPE } from "../customEventTypes";
 
 const { push, first, second } = arrayUtilities;
 
@@ -70,20 +68,6 @@ function onCustomPress(pressCustomHandler, element) {
 function offCustomPress(pressCustomHandler, element) {
   const customEventType = PRESS_CUSTOM_EVENT_TYPE,
         customHandler = pressCustomHandler; ///
-
-  this.offCustomEvent(customEventType, customHandler, element);
-}
-
-function onCustomDrag(dragCustomHandler, element) {
-  const customEventType = DRAG_CUSTOM_EVENT_TYPE,
-        customHandler = dragCustomHandler; ///
-
-  this.onCustomEvent(customEventType, customHandler, element);
-}
-
-function offCustomDrag(dragCustomHandler, element) {
-  const customEventType = DRAG_CUSTOM_EVENT_TYPE,
-        customHandler = dragCustomHandler; ///
 
   this.offCustomEvent(customEventType, customHandler, element);
 }
@@ -559,13 +543,7 @@ function drag(event, element) {
         left = relativePosition.getLeft(),
         direction = relativePosition.getDirection();
 
-  let customEventType;
-
-  customEventType = DRAG_CUSTOM_EVENT_TYPE;
-
-  this.callCustomHandlers(customEventType, event, element, top, left);
-
-  customEventType = null;
+  let customEventType = null;
 
   if ((Math.abs(direction)) < MAXIMUM_SPREAD) {
     customEventType = DRAG_RIGHT_CUSTOM_EVENT_TYPE;
@@ -687,8 +665,6 @@ const touchMixins = {
   disableTouch,
   onCustomPress,
   offCustomPress,
-  onCustomDrag,
-  offCustomDrag,
   onCustomDragUp,
   offCustomDragUp,
   onCustomDragDown,
