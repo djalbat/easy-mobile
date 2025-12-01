@@ -19,6 +19,7 @@ import { PRESS_CUSTOM_EVENT_TYPE,
          SWIPE_RIGHT_CUSTOM_EVENT_TYPE,
          PINCH_MOVE_CUSTOM_EVENT_TYPE,
          PINCH_START_CUSTOM_EVENT_TYPE,
+         PINCH_STOP_CUSTOM_EVENT_TYPE,
          SINGLE_TAP_CUSTOM_EVENT_TYPE,
          DOUBLE_TAP_CUSTOM_EVENT_TYPE } from "../customEventTypes";
 
@@ -222,6 +223,20 @@ function onCustomPinchStart(pinchStartCustomHandler, element) {
 function offCustomPinchStart(pinchStartCustomHandler, element) {
   const customEventType = PINCH_START_CUSTOM_EVENT_TYPE,
         customHandler = pinchStartCustomHandler; ///
+
+  this.offCustomEvent(customEventType, customHandler, element);
+}
+
+function onCustomPinchStop(pinchStopCustomHandler, element) {
+  const customEventType = PINCH_STOP_CUSTOM_EVENT_TYPE,
+        customHandler = pinchStopCustomHandler; ///
+
+  this.onCustomEvent(customEventType, customHandler, element);
+}
+
+function offCustomPinchStop(pinchStopCustomHandler, element) {
+  const customEventType = PINCH_STOP_CUSTOM_EVENT_TYPE,
+        customHandler = pinchStopCustomHandler; ///
 
   this.offCustomEvent(customEventType, customHandler, element);
 }
@@ -445,6 +460,10 @@ function endHandler(event, element, positionsFromEvent) {
   if (positionsMatch) {
     const startPositionsLength = startPositions.length;
 
+    if (startPositionsLength === 2) {
+      this.pinchStop(event, element);
+    }
+
     if (startPositionsLength === 1) {
       this.possibleTap(event, element);
 
@@ -648,14 +667,20 @@ function dragStart(event, element) {
 
 function pinchStart(event, element) {
   const customEventType = PINCH_START_CUSTOM_EVENT_TYPE,
-        startPositions = this.getStartPositions(),
-        firstStartPosition = first(startPositions),
-        secondStartPosition = second(startPositions),
-        relativeStartPosition = RelativePosition.fromFirstPositionAndSecondPosition(firstStartPosition, secondStartPosition),
-        magnitude = relativeStartPosition.getMagnitude(),
-        startMagnitude = magnitude; ///
+    startPositions = this.getStartPositions(),
+    firstStartPosition = first(startPositions),
+    secondStartPosition = second(startPositions),
+    relativeStartPosition = RelativePosition.fromFirstPositionAndSecondPosition(firstStartPosition, secondStartPosition),
+    magnitude = relativeStartPosition.getMagnitude(),
+    startMagnitude = magnitude; ///
 
   this.setStartMagnitude(startMagnitude);
+
+  this.callCustomHandlers(customEventType, event, element);
+}
+
+function pinchStop(event, element) {
+  const customEventType = PINCH_STOP_CUSTOM_EVENT_TYPE;
 
   this.callCustomHandlers(customEventType, event, element);
 }
@@ -687,6 +712,8 @@ const touchMixins = {
   offCustomPinchMove,
   onCustomPinchStart,
   offCustomPinchStart,
+  onCustomPinchStop,
+  offCustomPinchStop,
   onCustomSingleTap,
   offCustomSingleTap,
   onCustomDoubleTap,
@@ -720,7 +747,8 @@ const touchMixins = {
   singleTap,
   doubleTap,
   dragStart,
-  pinchStart
+  pinchStart,
+  pinchStop
 };
 
 export default touchMixins;

@@ -106,6 +106,7 @@ The complete list of custom touch events that can be handled is:
 * `swipe-right`
 * `pinch-move`
 * `pinch-start`
+* `pinch-stop`
 * `single-tap`
 * `double-tap`
 
