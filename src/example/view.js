@@ -5,8 +5,6 @@ import withStyle from "easy-with-style";  ///
 import { Element } from "easy";
 import { touchMixins } from "../index"; ///
 
-import FullScreenDiv from "./view/div/fullScreen";
-
 class View extends Element {
   singleTapCustomHandler = (event, element, top, left) => {
     console.log("single tap")
@@ -64,14 +62,6 @@ class View extends Element {
     this.offCustomPinchStart(this.pinchStartCustomHandler);
     this.offCustomSingleTap(this.singleTapCustomHandler);
     this.offCustomDoubleTap(this.doubleTapCustomHandler);
-  }
-
-  childElements() {
-    return (
-
-      <FullScreenDiv/>
-
-    );
   }
 
   static tagName = "div";
