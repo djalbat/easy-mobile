@@ -27,8 +27,6 @@ class FullScreenDiv extends Element {
   didMount() {
     this.enableTouch();
 
-    this.enableFullScreen();
-
     this.onCustomPress(this.pressCustomHandler);
 
     this.onCustomFullScreenChange(this.fullScreenChangeCustomHandler);
@@ -38,8 +36,6 @@ class FullScreenDiv extends Element {
     this.offCustomFullScreenChange(this.fullScreenChangeCustomHandler);
 
     this.offCustomPress(this.pressCustomHandler);
-
-    this.disableFullScreen();
 
     this.disableTouch();
   }

@@ -3,7 +3,6 @@
 Touch gestures for mobile web applications.
 
 Single tap, double tap, drag, pinch and swipe gestures are all supported. 
-A little full-screen functionality is also included.
 
 ### JSX support
 
@@ -53,9 +52,9 @@ One last thing to bear in mind is that this package is included by way of a rela
 
 ## Usage
 
-Two mixins are provided, one for the touch functionality and one for the full-screen functionality.
-They should be assigned to the class's prototype in the usual manner.
-In order to make use of the mixins, call their associated enable and disable functions when mounting and unmounting.
+A single mixin is provided for the touch functionality.
+It should be assigned to the class's prototype in the usual manner.
+In order to make use of it, call the associated enable and disable functions.
 
 ### Touches functionality
 
@@ -121,64 +120,6 @@ As well as the usual `event` and `element` first and second arguments, the handl
 * The `pinch-move` event handler has a `ratio` additional argument that is the ratio of the distance between the two touch positions divided by the distance between the two starting touch positions.
  
 * The `swipe-up`, `swipe-down`, `swipe-left` and `swipe-right` event handlers have `top` and `left` additional arguments for the touch position at the start of the swipe. They also have a `speed` argument which is the speed of the touch position projected in the swipe's direction.
-
-### Full-screen functionality
-
-There are two methods that the full-screen mixin provides along with the usual methods to enable and disable the functionality as well as register or deregister the handler.
-The following listing should suffice for an explanation:
-
-```
-import { Element } from "easy";
-import { fullScreenMixins, fullScreenUtilities } from "easy-mobile";
-
-import FullScreenButton from "../button/fullScreen";
-
-const { isFullScreen } = fullScreenUtilities;
-
-class FullScreenDiv extends Element {
-  fullScreenChangeCustomHandler = (event, element) => {
-    ///
-  }
-
-  fullScreenButtonClickHandler = (event, element) => {
-    const fullScreen = isFullScreen();
-
-    fullScreen ?
-      this.exitFullScreen() :
-        this.requestFullScreen();
-  }
-
-  didMount() {
-    this.enableFullScreen();
-
-    this.onCustomFullScreenChange(this.fullScreenButtonClickHandler)
-  }
-
-  willUnmount() {
-    this.offCustomFullScreenChange(this.fullScreenButtonClickHandler)
-
-    this.disableFullScreen();
-  }
-
-  childElements() {
-    return (
-
-      <FullScreenButton onClick={this.fullScreenButtonClickHandler} />
-
-    );
-  }
-
-  ...
-}
-
-Object.assign(FullScreenDiv.prototype, fullScreenMixins);
-```
-
-There is only one full-screen custom event:
-
-* `full-screen-change`
-
-This should always be used as there will be times when full-screen requests are denied.
 
 ## Building
 

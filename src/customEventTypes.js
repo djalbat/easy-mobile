@@ -15,4 +15,3 @@ export const PINCH_START_CUSTOM_EVENT_TYPE = "pinch-start";
 export const PINCH_STOP_CUSTOM_EVENT_TYPE = "pinch-stop";
 export const SINGLE_TAP_CUSTOM_EVENT_TYPE = "single-tap";
 export const DOUBLE_TAP_CUSTOM_EVENT_TYPE = "double-tap";
-export const FULL_SCREEN_CHANGE_CUSTOM_EVENT_TYPE = "full-screen-change";
