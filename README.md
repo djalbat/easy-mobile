@@ -1,6 +1,6 @@
-# Easy Mobile
+# Easy Gestures
 
-Touch gestures for mobile web applications.
+Touch gestures for web applications.
 
 Single tap, double tap, drag, pinch and swipe gestures are all supported. 
 
@@ -12,7 +12,7 @@ There is now support for JSX in the form of [Juxtapose](https://github.com/djalb
 
 - [Easy](https://github.com/djalbat/easy) Elements that abstract away from the DOM.
 - [Easy Layout](https://github.com/djalbat/easy-layout) Layout elements that work with CSS flexbox.
-- [Easy Mobile](https://github.com/djalbat/easy-mobile) Touch gestures for mobile web applications.
+- [Easy Gestures](https://github.com/djalbat/easy-gestures) Touch gestures for web applications.
 - [Easy Navigation](https://github.com/djalbat/easy-navigation) A responsive accordion and associated navigation.
 - [Easy File System](https://github.com/djalbat/easy-file-system) A file system explorer and a rubbish bin.
 - [Easy Rich Textarea](https://github.com/djalbat/easy-richtextarea) A textarea element that handles and hands off events well.
@@ -22,11 +22,11 @@ There is now support for JSX in the form of [Juxtapose](https://github.com/djalb
 
 You can install Easy Layout with [npm](https://www.npmjs.com/):
 
-    npm install easy-mobile
+    npm install easy-gestures
 
 You can also clone the repository with [Git](https://git-scm.com/)...
 
-    git clone https://github.com/djalbat/easy-mobile.git
+    git clone https://github.com/djalbat/easy-gestures.git
 
 ...and then install the dependencies with npm from within the project's root directory:
 
